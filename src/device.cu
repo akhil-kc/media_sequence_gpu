@@ -43,16 +43,80 @@ __device__ int getScore(char a,char b,char c,int scores[4],int allStates[27])
 					   maxScore=(score>maxScore)?score:maxScore;
 					  break;
 				case 133: score=(match+del+del);
-						maxScore=(score>maxScore)?score:maxScore;
+				          maxScore=(score>maxScore)?score:maxScore;
 					  break;
 		
 			}
 		}
+		else if (allStates[i]<300)
+		{
+			switch(allStates[i]){
+			case 211: score=((b==c)?(insert+match+match):(insert+mismatch+mismatch));
+				  maxScore=(score>maxScore)?score:maxScore;
+				  break;
+			case 212: score=(insert+match+insert);
+				  maxScore=(score>maxScore)?score:maxScore;
+				  break;
+			case 213: score=(insert+match+del);
+				  maxScore=(score>maxScore)?score:maxScore;
+				  break;
+			case 221: score=(insert+insert+match);
+				  maxScore=(score>maxScore)?score:maxScore;
+				  break;
+			case 222: score=(insert+insert+insert);
+				  maxScore=(score>maxScore)?score:maxScore;
+				  break;
+			case 223: score=(insert+insert+del);
+				  maxScore=(score>maxScore)?score:maxScore;
+				  break;
+			case 231: score=(insert+del+match);
+				  maxScore=(score>maxScore)?score:maxScore;
+				  break;
+			case 232: score=(insert+del+insert);
+				  maxScore=(score>maxScore)?score:maxScore;
+				  break;
+			case 233: score=(insert+del+del);
+				  maxScore=(score>maxScore)?score:maxScore;
+				  break;
+			}
+		}
+		else{
+			switch(allStates[i]){
+			case 311: score=((b==c)?(del+match+match):(del+mismatch+mismatch));
+				  maxScore=(score>maxScore)?score:maxScore;
+				  break;
+			case 312: score=(del+match+insert);
+                                  maxScore=(score>maxScore)?score:maxScore;
+                                  break;
+                        case 313: score=(del+match+del);
+                                  maxScore=(score>maxScore)?score:maxScore;
+                                  break;
+                        case 321: score=(del+insert+match);
+                                  maxScore=(score>maxScore)?score:maxScore;
+                                  break;
+                        case 322: score=(del+insert+insert);
+                                  maxScore=(score>maxScore)?score:maxScore;
+                                  break;
+                        case 323: score=(del+insert+del);
+                                  maxScore=(score>maxScore)?score:maxScore;
+                                  break;
+                        case 331: score=(del+del+match);
+                                  maxScore=(score>maxScore)?score:maxScore;
+                                  break;
+                        case 332: score=(del+del+insert);
+                                  maxScore=(score>maxScore)?score:maxScore;
+                                  break;
+                        case 333: score=(del+del+del);
+                                  maxScore=(score>maxScore)?score:maxScore;
+                                  break;
+			}
+		}
+
 	}
 	return maxScore;
 }
 
-__global__ void parallel_score(char *sequence1,char * sequence2,char* sequence3,int xLen,int yLen,int zLen,int a[][DATAYSIZE][DATAXSIZE],unsigned size,int scores[4],int allStates[27])
+__global__ void parallel_score(char *sequence1,char * sequence2,char* sequence3,int xLen,int yLen,int zLen,int a[][DATAYSIZE][DATAXSIZE],int state[][DATAYSIZE][DATAXSIZE],int scores[4],int allStates[27])
 {
     unsigned idx = blockIdx.x*blockDim.x + threadIdx.x;
     unsigned idy = blockIdx.y*blockDim.y + threadIdx.y;

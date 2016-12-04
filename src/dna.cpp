@@ -54,5 +54,6 @@ bool DNA::read_file(char * fileName){
         seq = (char *)realloc(seq, i + 1);
         if(seq == NULL) return false;
         (*this).seq_string=seq;
+        (*this).seq_name=sequenceName;
         return true;
 }
